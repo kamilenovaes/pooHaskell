@@ -1,0 +1,220 @@
+-- Classes do "produto"
+
+-- Nome, valor e quantidade
+type ProdutoEmEstoque = (String, Float, Int)
+
+type ArmazenaProdutos = [(String, Float, Int)]
+
+-- Nome e quantidade
+type Itens = (String, Int)
+
+type CarrinhoCompra = [(String, Int)]
+
+
+-- Funcoes  
+pegaNome :: ProdutoEmEstoque -> String
+pegaNome(s,_,_) = s 
+
+pegaValor :: ProdutoEmEstoque -> Float
+pegaValor(_,v,_) = v
+
+pegaQuantidade :: ProdutoEmEstoque -> Int
+pegaQuantidade(_,_,q) = q
+
+pegaNomeComp :: Itens -> String
+pegaNomeComp(s,_) = s
+
+pegaQuantComp :: Itens -> Int
+pegaQuantComp(_,q) = q
+
+
+-- Produtos do Estoque 
+monitorEst :: ProdutoEmEstoque
+monitorEst = ("monitor", 500, 100)
+
+telefoneEst :: ProdutoEmEstoque
+telefoneEst = ("telefone", 150, 300)
+
+tecladoEst :: ProdutoEmEstoque
+tecladoEst = ("teclado", 70, 50)
+
+mouseEst :: ProdutoEmEstoque
+mouseEst = ("mouse", 50, 50)
+
+
+-- Produtos comprados
+monitor :: Itens
+monitor = ("monitor", 2)
+
+telefone :: Itens
+telefone = ("telefone", 5)
+
+teclado :: Itens
+teclado = ("teclado", 2)
+
+
+-- Metodos 
+adicionaProduto :: (String, Float, Int) -> [(String, Float, Int)] -> [(String, Float, Int)]
+adicionaProduto produto estoqueTotal = produto:estoqueTotal
+
+adicionaItem :: (String, Int) -> [(String, Int)]
+adicionaItem produto = produto:[]
+
+
+-- Atualizando a quantidade do estoque 
+prod1 :: ProdutoEmEstoque
+prod1 = ("monitor", 500, pegaQuantidade monitorEst - pegaQuantComp monitor)
+
+prod2 :: ProdutoEmEstoque
+prod2 = ("telefone", 150 , pegaQuantidade telefoneEst - pegaQuantComp telefone)
+
+prod3 :: ProdutoEmEstoque
+prod3 = ("teclado", 70, pegaQuantidade tecladoEst - pegaQuantComp teclado)
+
+
+-- Atribuindo 
+estoque :: ArmazenaProdutos
+estoque = adicionaProduto monitorEst $ adicionaProduto telefoneEst $ adicionaProduto tecladoEst $ adicionaProduto mouseEst []
+
+carrinho :: CarrinhoCompra
+carrinho = adicionaItem monitor ++ adicionaItem telefone ++ adicionaItem teclado
+
+estoqueFinal :: ArmazenaProdutos
+estoqueFinal = adicionaProduto prod1 $ adicionaProduto prod2 $ adicionaProduto prod3 $ adicionaProduto mouseEst estoque
+
+
+-- Total 
+
+preco :: (String, Float, Int) -> (String, Float)
+preco produto = (pegaNome produto, pegaValor produto)
+listadeprecos = map preco estoque 
+
+fat x 
+    | x == 0 = 1
+    | otherwise = x * fat (x-1)
+
+>> fat 5
+>> preco ("monitor", 500 , 5) 
+
+multiplicval :: (String, Int) -> Float
+multiplicval p = (pegaQuantComp p) * (preco )
+listadevalores = map multiplicval carrinho
+
+somaTotal :: Float
+somaTotal = sum listadevalores
+
+
+main :: IO ()
+main = do
+
+print(somaTotal)
+
+
+
+
+
+
+==================== 2 ====================
+-- Classes do "produto"
+
+-- Nome, valor e quantidade
+type ProdutoEmEstoque = (String, Float, Int)
+type ArmazenaProdutos = [(String, Float, Int)]
+type Itens = (String, Float, Int)
+type CarrinhoCompra = [(String, Float, Int)]
+
+
+-- Funcoes  
+pegaNome :: ProdutoEmEstoque -> String
+pegaNome(s,_,_) = s 
+
+pegaValor :: ProdutoEmEstoque -> Float
+pegaValor(_,v,_) = v
+
+pegaQuantidade :: ProdutoEmEstoque -> Int
+pegaQuantidade(_,_,q) = q
+
+--pegaNomeComp :: Itens -> String
+--pegaNomeComp(s,_) = s
+
+--pegaQuantComp :: Itens -> Int
+--pegaQuantComp(_,q) = q
+
+pegaQuantComp :: (String, Float, Int) -> Float
+pegaQuantComp (_,_,q) = fromIntegral q
+
+
+-- Produtos do Estoque 
+monitorEst :: ProdutoEmEstoque
+monitorEst = ("monitor", 500, 100)
+
+telefoneEst :: ProdutoEmEstoque
+telefoneEst = ("telefone", 150, 300)
+
+tecladoEst :: ProdutoEmEstoque
+tecladoEst = ("teclado", 70, 50)
+
+mouseEst :: ProdutoEmEstoque
+mouseEst = ("mouse", 50, 50)
+
+
+-- Produtos comprados
+monitor :: Itens
+monitor = ("monitor", 500, 2)
+
+telefone :: Itens
+telefone = ("telefone", 150, 5)
+
+teclado :: Itens
+teclado = ("teclado", 70, 2)
+
+
+-- Metodos 
+adicionaProduto :: (String, Float, Int) -> [(String, Float, Int)] -> [(String, Float, Int)]
+adicionaProduto produto estoqueTotal = produto:estoqueTotal
+
+adicionaItem :: (String, Int) -> [(String, Int)]
+adicionaItem produto = produto:[]
+
+
+-- Atualizando a quantidade do estoque 
+prod1 :: ProdutoEmEstoque
+prod1 = ("monitor", 500, pegaQuantidade monitorEst - pegaQuantidade monitor)
+
+prod2 :: ProdutoEmEstoque
+prod2 = ("telefone", 150 , pegaQuantidade telefoneEst - pegaQuantidade telefone)
+
+prod3 :: ProdutoEmEstoque
+prod3 = ("teclado", 70, pegaQuantidade tecladoEst - pegaQuantidade teclado)
+
+
+-- Atribuindo 
+estoque :: ArmazenaProdutos
+--estoque = adicionaProduto monitorEst $ adicionaProduto telefoneEst $ adicionaProduto tecladoEst $ adicionaProduto mouseEst []
+estoque = monitorEst : telefoneEst : tecladoEst : mouseEst : []
+
+
+carrinho :: CarrinhoCompra
+--carrinho = adicionaItem monitor ++ adicionaItem telefone ++ adicionaItem teclado
+carrinho = monitor : telefone : teclado : []
+
+estoqueFinal :: ArmazenaProdutos
+--estoqueFinal = adicionaProduto prod1 $ adicionaProduto prod2 $ adicionaProduto prod3 $ adicionaProduto mouseEst estoque
+estoqueFinal = prod1 : prod2 : prod3 : []
+
+
+-- Total 
+-- pegaValor monitorEst * pegaQuantComp monitor
+multiplicval :: (String, Float, Int) -> Float
+multiplicval p = (pegaValor p) * (pegaQuantComp p)
+listadevalores = map multiplicval carrinho
+
+somaTotal :: Float
+somaTotal = sum listadevalores
+
+
+main :: IO ()
+main = do
+
+--print(somaTotal)
+print(somaTotal)
